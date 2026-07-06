@@ -101,9 +101,9 @@ Nel YAML, sezione `labels`, elenca piu' target:
 labels:
   type: custom
   value:
-    - _target: Vertex_x
-    - _target: Vertex_y
-    - _target: Vertex_z
+    Vertex_x: Vertex_x
+    Vertex_y: Vertex_y
+    Vertex_z: Vertex_z
 ```
 
 `get_model` legge `len(data_config.label_value)` e dimensiona da solo

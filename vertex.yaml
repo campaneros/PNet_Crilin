@@ -1,0 +1,76 @@
+# Data config weaver-core per la regressione del vertice di inizio
+# sciame in CRILIN dagli hit Cherenkov.
+#
+# Tree: events
+# Point cloud: un "punto" per hit calorimetrico con Hit_NCherenkov > 0.
+# Target di regressione: Vertex_z  (cambia in _target se vuoi x/y).
+#
+# Convenzioni weaver:
+#   - i gruppi in `inputs` producono i tensori 'points', 'features', 'mask'
+#     attesi dal ParticleNetTagger ufficiale;
+#   - `length` = padding/clipping al numero fisso di hit per evento;
+#   - la standardizzazione (subtract_by/multiply_by) e' applicata on-the-fly.
+
+treename: events
+
+# nessuna selezione: usiamo tutti gli eventi
+selection: null
+test_time_selection: null
+
+new_variables:
+  # maschera degli hit realmente Cherenkov (evita hit a zero fotoni)
+  hit_mask: np.log1p(Hit_NCherenkov) > 0
+  # feature scalari per-hit
+  log_nph: np.log1p(Hit_NCherenkov)
+  # coordinate grezze (per pf_points, niente standardizzazione)
+  hit_x: Hit_x
+  hit_y: Hit_y
+  hit_z: Hit_z
+  # stessi valori ma nome diverso per pf_features: weaver non permette
+  # normalizzazioni diverse sulla stessa variabile usata in due gruppi
+  feat_x: Hit_x
+  feat_y: Hit_y
+  feat_z: Hit_z
+
+# ---------------------------------------------------------------------------
+inputs:
+  pf_points:
+    length: 1024
+    pad_mode: constant
+    vars:
+      - [hit_x, null, 1]
+      - [hit_y, null, 1]
+      - [hit_z, null, 1]
+  pf_features:
+    length: 1024
+    pad_mode: constant
+    vars:
+      # [nome, subtract_by (center), multiply_by (1/scale)]
+      # null,null => nessuna standardizzazione (metti i valori veri!)
+      - [feat_x, 0.009546, 0.03815]
+      - [feat_y, -0.007169, 0.03816]
+      - [feat_z, -7.182, 0.01564]
+      - [log_nph, 5.917, 0.4758]
+  pf_mask:
+    length: 1024
+    pad_mode: constant
+    vars:
+      - [hit_mask, null]
+
+# ---------------------------------------------------------------------------
+# Regressione: `type: custom` + lista di target continui.
+labels:
+  type: custom
+  value:
+    Vertex_z: Vertex_z
+
+# variabili solo osservate (finiscono nel file di predizione, non nel training)
+observers:
+  - EventID
+  - PrimaryEnergy
+  - Vertex_x
+  - Vertex_y
+  - Vertex_z
+
+# nessun reweighting per la regressione
+weights: null
