@@ -2,3 +2,7 @@
 .codegraph
 files/
 __pycache__
+pion_reference.py
+*.weights.h5
+plots/
+runs/
