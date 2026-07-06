@@ -6,3 +6,4 @@ pion_reference.py
 *.weights.h5
 plots/
 runs/
+*.log
