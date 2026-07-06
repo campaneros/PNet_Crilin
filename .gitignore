@@ -1,3 +1,4 @@
 *.root
 .codegraph
 files/
+__pycache__
