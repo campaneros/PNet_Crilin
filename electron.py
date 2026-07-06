@@ -15,12 +15,10 @@ lato fascio (faccia d'ingresso: layer a z=+92.5 mm), lo sciame si sviluppa
 verso z decrescenti (layer piu' profondo a z=-95.5 mm). La profondita' e'
 quindi (z_fronte - z).
 
-Target (--target): qualunque branch scalare del tree. Il vero primo vertice
-longitudinale NON e' negli ntuple attuali (Vertex_z e' il punto di
-generazione, costante a 400 mm), quindi la pipeline si valida sulle posizioni
-con verita' disponibile - Vertex_x / Vertex_y (spot del fascio, +-2.5 mm),
-stesso tipo di task forma->posizione - oppure su PrimaryEnergy. Con i nuovi
-ntuple bastera' --target FirstVertex_z.
+Target (--target): qualunque branch scalare del tree. Il punto di inizio
+longitudinale non ha verita' MC negli ntuple attuali: la sua stima dalla sola
+forma del deposito (frazioni di energia per layer pesate lungo z) e' in
+shower_start.py; questa rete si valida nel frattempo su PrimaryEnergy.
 
 Ambiente (lxplus, GPU):
   source /cvmfs/sft.cern.ch/lcg/views/LCG_110_cuda/x86_64-el9-gcc13-opt/setup.sh
@@ -59,10 +57,11 @@ def cli():
                    help="ROOT file di training (e di predizione, se --predict-file manca)")
     p.add_argument("--predict-file", default=None,
                    help="ROOT file su cui predire (default: --file)")
-    p.add_argument("--target", default="Vertex_x",
-                   help="branch scalare da regredire: Vertex_x/Vertex_y "
-                        "(posizioni con verita' disponibile), PrimaryEnergy, "
-                        "o FirstVertex_z quando esistera'")
+    p.add_argument("--target", default="PrimaryEnergy",
+                   help="branch scalare da regredire (default PrimaryEnergy; "
+                        "puo' essere una qualunque branch scalare del tree, "
+                        "anche prodotta a parte, es. lo stimatore zbar_shift "
+                        "di shower_start.py)")
     p.add_argument("--target-scale", type=float, default=None,
                    help="fattore applicato al target (default: 1e-3 per le "
                         "branch *Energy*, MeV->GeV; 1 altrimenti, posizioni in mm)")

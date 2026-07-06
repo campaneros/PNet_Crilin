@@ -84,9 +84,34 @@ Test rapido (pochi eventi/epoche): aggiungere `--max-events 5000 --epochs 2`.
 come in pion.py) — formato compatibile con gli script di
 [offline-compensation-crilin-analysis](https://github.com/raeubaen/offline-compensation-crilin-analysis).
 
+## Punto di inizio sciame senza verità MC: `shower_start.py`
+
+Negli ntuple non c'è il vero primo vertice, quindi il punto di interazione
+longitudinale si stima dalla sola forma del deposito (frazioni di energia per
+layer pesate lungo z):
+
+1. **baricentro calibrato**: ⟨z⟩ = Σ E_l·z_l / ΣE_l; la profondità media cresce
+   come ln(E) (misurato: −11.0 mm per unità di ln E ≈ 1.2 X₀), quindi il
+   residuo Δ⟨z⟩ = ⟨z⟩ − atteso(E) è lo spostamento evento-per-evento
+   dell'inizio dello sciame (Δ⟨z⟩ > 0 = interazione più precoce);
+2. **fit Longo–Sestili**: le 5 frazioni longitudinali sono fittate con
+   dE/dt ∝ (b(t−t₀))^(a−1) e^(−b(t−t₀)) e t₀ è il punto di inizio in X₀ dalla
+   faccia d'ingresso.
+
+Sui campioni attuali (pe = 0.2): dispersione evento-per-evento
+σ_eff(Δ⟨z⟩) ≈ 8.4 mm ≈ 0.9 X₀ a 99 GeV fissi; il fit dà σ_eff(t₀) ≈ 1.2 X₀.
+
+```bash
+python shower_start.py --file /eos/user/m/mcampana/PNet/fixed99GeV_2.5mmsquared_30_100GeV_4mmAldesign.root
+```
+
+Output: `shower_start.root` con `zbar`, `zbar_shift`, `ls_t0`, `ls_z0`,
+`frac_layer0..4` per evento + plot (profilo, ⟨z⟩ vs ln E, distribuzioni).
+
 ## File
 
 | file | scopo |
 |---|---|
-| `electron.py` | training + predizione (adattamento di pion.py) |
+| `electron.py` | training + predizione ParticleNet (target configurabile) |
+| `shower_start.py` | stima del punto di inizio sciame dalle frazioni di energia lungo z (senza verità MC) |
 | `evaluate.py` | residui, bias, σ_eff, plot da `prediction.root` |
