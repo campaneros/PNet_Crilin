@@ -16,21 +16,17 @@ la pipeline si valida
 sulle posizioni la cui verità **è** disponibile: `Vertex_x`/`Vertex_y` (spot
 del fascio, ±2.5 mm) — lo stesso tipo di task (geometria dello sciame →
 posizione), solo sull'asse trasverso. In alternativa `--target PrimaryEnergy`
-riproduce il task del paper. Quando il target vero sarà disponibile basterà:
-
-```bash
-python electron.py --file nuovo.root --train --target FirstVertex_z
-```
+riproduce il task del paper. 
 
 ## Variabili di input
 
-Per ogni cella (max 245 = 7×7×5), le quattro di `pion.py` più la frazione di
+Per ogni cella (max 245 = 7×7×5),  la frazione di
 energia:
 
 | variabile | significato |
 |---|---|
 | `Hit_x`, `Hit_y`, `Hit_z` | posizione del centro cella [mm] |
-| `E` smearata | `Poisson(pe·E)/pe` in GeV, soglia 50 MeV (fotostatistica; `--pe`, default 0.2 pe/MeV come in pion.py — la resa Cherenkov misurata su questi ntuple è ~24.4 pe/MeV) |
+| `E` smearata | `Poisson(pe·E)/pe` in GeV, soglia 50 MeV (fotostatistica; `--pe`, default 0.2 pe/MeV  — la resa Cherenkov misurata su questi ntuple è ~24.4 pe/MeV) |
 | `E/E_sum` | frazione di energia della cella: rende esplicita la **forma** dello sciame, indipendente dalla scala di energia |
 
 Fisicamente: lo spostamento del punto di inizio sciame trasla rigidamente il
