@@ -110,19 +110,3 @@ labels:
 l'uscita a 3 nodi; la MSE media sulle 3 componenti. Nessun'altra
 modifica.
 
-## Cambiare loss
-
-In `networks/particle_net_regr.py`, `RegressionLoss` eredita da
-`nn.MSELoss`. Per Huber o L1 basta cambiare la classe base
-(`nn.HuberLoss`, `nn.L1Loss`).
-
-## Perche' questo e' "canonico"
-
-- backbone = `weaver.nn.model.ParticleNet.ParticleNet` (invariato);
-- `FeatureConv`, `conv_params [(16,(64,64,64)),(16,(128,128,128)),
-  (16,(256,256,256))]`, `fc_params [(256,0.1)]`: identici al
-  `ParticleNetTagger` ufficiale;
-- unica differenza dal tagger: `for_inference=False` (niente softmax),
-  testa a `num_targets` nodi e loss MSE — le modifiche minime
-  necessarie per passare da classificazione a regressione.
-```
